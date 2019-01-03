@@ -951,9 +951,9 @@ func newServer(ctx context.Context, v *viper.Viper) (*server, error) {
 	mainMux.Handle("/", s.traceClient.HTTPHandler(mux))
 
 	s.root = rootHandler{
-		{"api.", httpsRedirectHandler{s.traceClient.HTTPHandler(apiMux)}},
+		{"api.", s.traceClient.HTTPHandler(apiMux)},
 		{"talks.godoc.org", otherDomainHandler{"https", "go-talks.appspot.com"}},
-		{"", httpsRedirectHandler{mainMux}},
+		{"", mainMux},
 	}
 
 	cacheBusters := &httputil.CacheBusters{Handler: mux}
